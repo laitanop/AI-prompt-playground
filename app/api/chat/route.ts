@@ -12,11 +12,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const temp = Math.max(0, Math.min(1, temperature ?? 1));
+
     const response = await client.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1024,
       system: systemPrompt || "You are a helpful assistant.",
-      temperature: temperature || 1,
+      temperature: temp,
       messages: [
         {
           role: "user",
