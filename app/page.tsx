@@ -24,6 +24,7 @@ export default function Home() {
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [expandedGuide, setExpandedGuide] = useState(true);
+  const [streamingEnabled, setStreamingEnabled] = useState(false);
 
   const handlePreset = (preset: PresetKey) => {
     setSystemPrompt(SYSTEM_PRESETS[preset]);
@@ -45,6 +46,7 @@ export default function Home() {
           message,
           systemPrompt,
           temperature,
+          stream: streamingEnabled,
         }),
       });
 
@@ -53,9 +55,43 @@ export default function Home() {
         throw new Error(data.error || "Failed to get response");
       }
 
-      const data = await res.json();
-      setResponse(data.message);
-      setTokens(data.tokens);
+      if (streamingEnabled && res.body) {
+        // Handle streaming response
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let fullResponse = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split("\n");
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.text) {
+                  fullResponse += data.text;
+                  setResponse(fullResponse);
+                }
+                if (data.tokens) {
+                  setTokens(data.tokens);
+                }
+              } catch {
+                // Ignore parse errors
+              }
+            }
+          }
+        }
+      } else {
+        // Handle regular response
+        const data = await res.json();
+
+        setResponse(data.message);
+        setTokens(data.tokens);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -123,7 +159,10 @@ export default function Home() {
                 <div className="info-icon-wrapper">
                   <span className="info-icon">ℹ️</span>
                   <div className="tooltip">
-                    Temperature is a powerful parameter that controls how predictable or creative Claude's responses will be. Understanding how to use it effectively can dramatically improve your AI applications.
+                    Temperature is a powerful parameter that controls how
+                    predictable or creative Claude's responses will be.
+                    Understanding how to use it effectively can dramatically
+                    improve your AI applications.
                   </div>
                 </div>
               </label>
@@ -142,7 +181,9 @@ export default function Home() {
               </div>
 
               {/* Temperature Guide Accordion */}
-              <div className={`temp-guide-card ${expandedGuide ? "expanded" : "collapsed"}`}>
+              <div
+                className={`temp-guide-card ${expandedGuide ? "expanded" : "collapsed"}`}
+              >
                 <button
                   className="temp-guide-header"
                   onClick={() => setExpandedGuide(!expandedGuide)}
@@ -188,6 +229,27 @@ export default function Home() {
             {/* Message Input */}
             <div className="control-section">
               <label>Your Message</label>
+              <div className="streaming-toggle">
+                <input
+                  type="checkbox"
+                  id="streaming-checkbox"
+                  checked={streamingEnabled}
+                  onChange={(e) => setStreamingEnabled(e.target.checked)}
+                />
+                <label htmlFor="streaming-checkbox">
+                  <span className="toggle-icon">🌊</span>
+                  Enable Streaming
+                  <div className="info-icon-wrapper">
+                    <span className="info-icon">ℹ️</span>
+                    <div className="tooltip">
+                      Streaming allows Claude to send responses token-by-token
+                      in real-time, making responses feel more interactive and
+                      immediate. Without streaming, you wait for the complete
+                      response before seeing any output.
+                    </div>
+                  </div>
+                </label>
+              </div>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
