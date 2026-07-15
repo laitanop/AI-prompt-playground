@@ -23,6 +23,7 @@ export default function Home() {
     output: number;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [expandedGuide, setExpandedGuide] = useState(true);
 
   const handlePreset = (preset: PresetKey) => {
     setSystemPrompt(SYSTEM_PRESETS[preset]);
@@ -119,6 +120,12 @@ export default function Home() {
               <label>
                 Temperature:{" "}
                 <span className="temp-value">{temperature.toFixed(1)}</span>
+                <div className="info-icon-wrapper">
+                  <span className="info-icon">ℹ️</span>
+                  <div className="tooltip">
+                    Temperature is a powerful parameter that controls how predictable or creative Claude's responses will be. Understanding how to use it effectively can dramatically improve your AI applications.
+                  </div>
+                </div>
               </label>
               <input
                 type="range"
@@ -132,6 +139,49 @@ export default function Home() {
               <div className="temp-labels">
                 <span>0 (predictable)</span>
                 <span>1 (creative)</span>
+              </div>
+
+              {/* Temperature Guide Accordion */}
+              <div className={`temp-guide-card ${expandedGuide ? "expanded" : "collapsed"}`}>
+                <button
+                  className="temp-guide-header"
+                  onClick={() => setExpandedGuide(!expandedGuide)}
+                >
+                  <span className="chevron-icon">›</span>
+                  <span className="temp-guide-icon">📊</span>
+                  <span>Temperature Guide</span>
+                </button>
+                <div className="temp-guide">
+                  <div className="temp-range">
+                    <div className="range-header">❄️ Low (0.0 - 0.3)</div>
+                    <div className="range-items">
+                      <span>Factual responses</span>
+                      <span>Coding assistance</span>
+                      <span>Data extraction</span>
+                      <span>Content moderation</span>
+                    </div>
+                  </div>
+
+                  <div className="temp-range">
+                    <div className="range-header">🌡️ Medium (0.4 - 0.7)</div>
+                    <div className="range-items">
+                      <span>Summarization</span>
+                      <span>Educational content</span>
+                      <span>Problem-solving</span>
+                      <span>Creative writing (constrained)</span>
+                    </div>
+                  </div>
+
+                  <div className="temp-range">
+                    <div className="range-header">🔥 High (0.8 - 1.0)</div>
+                    <div className="range-items">
+                      <span>Brainstorming</span>
+                      <span>Creative writing</span>
+                      <span>Marketing content</span>
+                      <span>Joke generation</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

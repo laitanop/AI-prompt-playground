@@ -59,10 +59,16 @@ header p {
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  overflow: visible;
+}
+
+.controls-panel {
+  padding-top: 3rem;
 }
 
 .control-section {
   margin-bottom: 2rem;
+  overflow: visible;
 }
 
 .control-section:last-child {
@@ -110,9 +116,9 @@ label {
 
 .tooltip {
   position: absolute;
-  bottom: 100%;
+  bottom: calc(100% + 12px);
   left: 50%;
-  transform: translateX(-50%) translateY(-8px);
+  transform: translateX(-50%);
   background: #2d3748;
   color: white;
   padding: 0.875rem 1rem;
@@ -128,15 +134,15 @@ label {
   visibility: hidden;
   pointer-events: none;
   transition: all 0.2s ease;
-  z-index: 1000;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   white-space: normal;
 }
 
 .tooltip::after {
   content: "";
   position: absolute;
-  top: 100%;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
@@ -149,8 +155,126 @@ label {
 .info-icon-wrapper:hover .tooltip {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-12px);
+  transform: translateX(-50%) translateY(0);
 }
+
+/* Temperature Guide Card */
+.temp-guide-card {
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.temp-guide-card.collapsed {
+  padding: 0;
+}
+
+.temp-guide-card.expanded {
+  padding: 1rem;
+}
+
+.temp-guide-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.temp-guide-header:hover {
+  background: rgba(66, 153, 225, 0.1);
+}
+
+.chevron-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+.temp-guide-card.expanded .chevron-icon {
+  transform: rotate(90deg);
+}
+
+.temp-guide-icon {
+  font-size: 1.2rem;
+}
+
+.temp-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.temp-guide-card.expanded .temp-guide {
+  max-height: 500px;
+  margin-top: 1rem;
+}
+
+.temp-range {
+  border-left: 3px solid;
+  padding-left: 0.75rem;
+}
+
+.temp-range:first-child {
+  border-left-color: #63b3ed;
+}
+
+.temp-range:nth-child(2) {
+  border-left-color: #f6ad55;
+}
+
+.temp-range:last-child {
+  border-left-color: #fc8181;
+}
+
+.range-header {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  color: #2d3748;
+}
+
+.range-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #4a5568;
+}
+
+.range-items span {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+}
+
+.range-items span::before {
+  content: "•";
+  margin-right: 0.5rem;
+  color: #4299e1;
+  font-weight: bold;
+}
+
 
 .temp-value {
   color: #4299e1;
