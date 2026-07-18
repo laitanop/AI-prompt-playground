@@ -449,6 +449,28 @@ textarea:focus {
   margin-bottom: 1rem;
   line-height: 1.8;
   word-wrap: break-word;
+  position: relative;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: #4299e1;
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .placeholder {
@@ -468,6 +490,25 @@ textarea:focus {
   color: #742a2a;
   margin-bottom: 1rem;
   font-weight: 500;
+}
+
+.timing-info {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.875rem 1rem;
+  background: #f0fff4;
+  border-radius: 8px;
+  border: 1px solid #c6f6d5;
+  font-size: 0.85rem;
+  color: #22543d;
+  font-family: monospace;
+  margin-bottom: 0.75rem;
+}
+
+.timing-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .token-info {

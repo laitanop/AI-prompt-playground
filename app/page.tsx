@@ -25,6 +25,11 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [expandedGuide, setExpandedGuide] = useState(true);
   const [streamingEnabled, setStreamingEnabled] = useState(false);
+  const [timing, setTiming] = useState<{
+    firstToken: number | null;
+    totalTime: number | null;
+  }>({ firstToken: null, totalTime: null });
+  const [isStreaming, setIsStreaming] = useState(false);
 
   const handlePreset = (preset: PresetKey) => {
     setSystemPrompt(SYSTEM_PRESETS[preset]);
@@ -37,6 +42,8 @@ export default function Home() {
     setError(null);
     setResponse("");
     setTokens(null);
+    setTiming({ firstToken: null, totalTime: null });
+    setIsStreaming(false);
 
     try {
       const res = await fetch("/api/chat", {
@@ -57,13 +64,26 @@ export default function Home() {
 
       if (streamingEnabled && res.body) {
         // Handle streaming response
+        const startTime = performance.now();
+        let firstTokenTime: number | null = null;
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let fullResponse = "";
 
+        setIsStreaming(true);
+
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            const endTime = performance.now();
+            const totalTime = (endTime - startTime) / 1000;
+            setTiming({
+              firstToken: firstTokenTime,
+              totalTime,
+            });
+            setIsStreaming(false);
+            break;
+          }
 
           const chunk = decoder.decode(value);
           const lines = chunk.split("\n");
@@ -73,6 +93,10 @@ export default function Home() {
               try {
                 const data = JSON.parse(line.slice(6));
                 if (data.text) {
+                  if (firstTokenTime === null) {
+                    const now = performance.now();
+                    firstTokenTime = (now - startTime) / 1000;
+                  }
                   fullResponse += data.text;
                   setResponse(fullResponse);
                 }
@@ -88,7 +112,6 @@ export default function Home() {
       } else {
         // Handle regular response
         const data = await res.json();
-
         setResponse(data.message);
         setTokens(data.tokens);
       }
@@ -273,7 +296,20 @@ export default function Home() {
 
             {response && (
               <>
-                <div className="response-content">{response}</div>
+                <div className="response-content">
+                  {response}
+                  {isStreaming && <span className="cursor">▌</span>}
+                </div>
+
+                {streamingEnabled && timing.firstToken !== null && (
+                  <div className="timing-info">
+                    <span>⚡ First token: {timing.firstToken.toFixed(2)}s</span>
+                    {timing.totalTime !== null && (
+                      <span>✓ Total time: {timing.totalTime.toFixed(2)}s</span>
+                    )}
+                  </div>
+                )}
+
                 {tokens && (
                   <div className="token-info">
                     <span>Input: {tokens.input} tokens</span>
