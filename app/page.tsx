@@ -2,12 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { sections } from "@/lib/sections";
 
-const STATUS_LABEL: Record<string, string> = {
-  done: "✅ Done",
-  "in-progress": "🚧 In progress",
-  planned: "🔒 Coming soon",
-};
-
 export default function Home() {
   return (
     <main>
@@ -38,9 +32,6 @@ export default function Home() {
                     />
                   </div>
                 )}
-                <div className="section-card-status">
-                  {STATUS_LABEL[section.status]}
-                </div>
                 <h2>{section.title}</h2>
                 <p>{section.tagline}</p>
                 <ul>

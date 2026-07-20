@@ -40,10 +40,11 @@ export const sections: CourseSection[] = [
       "Eval test cases",
       "Grading rubrics",
       "Model-graded evals",
-      "Comparing prompt variants",
+      "Change prompt & repeat",
     ],
-    status: "planned",
+    status: "done",
     href: "/sections/prompt-evaluation",
+    image: "/images/prompt-evaluation-card.png",
   },
   {
     id: "tool-integration",
