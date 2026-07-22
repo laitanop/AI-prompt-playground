@@ -4,7 +4,45 @@ import { useState } from "react";
 import SectionNav from "@/components/SectionNav";
 import type { EvalResult, OutputFormat, TestCase } from "@/lib/grading";
 
-const DEFAULT_SYSTEM_PROMPT = "Please answer the user's question.";
+const PROMPT_PRESETS = {
+  bare: {
+    label: "📝 Bare prompt",
+    prompt: "Please answer the user's question.",
+    description: "Generic instruction — establishes no context or style.",
+  },
+  chainOfThought: {
+    label: "🔗 Chain-of-thought",
+    prompt:
+      "Answer the user's question step by step. Show your reasoning and explain your thought process before giving the final answer.",
+    description:
+      "Ask the model to show its work — useful for complex reasoning and building trust in answers.",
+  },
+  expert: {
+    label: "🎓 Expert role",
+    prompt:
+      "You are a knowledgeable expert. Answer the user's question with authority, precision, and confidence. Be thorough but clear.",
+    description:
+      "Assign a role or persona — models often respond more authoritatively when given an expert identity.",
+  },
+  concise: {
+    label: "✂️ Constraint-based",
+    prompt:
+      "Answer the user's question in 1–2 sentences. Be concise and direct, avoid unnecessary detail.",
+    description:
+      "Add constraints (length, format, structure) — models excel when given clear boundaries.",
+  },
+  fewShot: {
+    label: "📚 Few-shot example",
+    prompt:
+      'Answer questions in a clear, informative style. Example: Q: "How tall is the Eiffel Tower?" A: "The Eiffel Tower is approximately 330 meters tall, including its antenna. It was completed in 1889 for the World\'s Fair." Now answer the user\'s question in a similar style.',
+    description:
+      "Provide examples of desired output — patterns are often clearer than abstract instructions.",
+  },
+};
+
+type PresetKey = keyof typeof PROMPT_PRESETS;
+
+const DEFAULT_SYSTEM_PROMPT = PROMPT_PRESETS.bare.prompt;
 
 const DEFAULT_TEST_CASES: TestCase[] = [
   { id: "1", input: "What's 2+2?", criteria: "" },
@@ -58,6 +96,10 @@ export default function PromptEvaluationPage() {
     setSummary(null);
     setPreviousSummary(null);
     setError(null);
+  };
+
+  const handlePreset = (preset: PresetKey) => {
+    setSystemPrompt(PROMPT_PRESETS[preset].prompt);
   };
 
   const handleAddTestCase = () => {
@@ -142,6 +184,40 @@ export default function PromptEvaluationPage() {
               placeholder="Define the prompt you want to evaluate..."
               rows={3}
             />
+            <div className="preset-buttons">
+              {(Object.keys(PROMPT_PRESETS) as PresetKey[]).map((key) => (
+                <button
+                  key={key}
+                  onClick={() => handlePreset(key)}
+                  className="preset-btn"
+                >
+                  {PROMPT_PRESETS[key].label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Technique Tips */}
+          <div className="control-section">
+            <label>
+              📖 Prompt Engineering Techniques
+              <div className="info-icon-wrapper">
+                <span className="info-icon">ℹ️</span>
+                <div className="tooltip">
+                  Different prompting strategies often produce different results.
+                  Try the presets above, run the eval, and compare scores to see
+                  which technique works best for your use case.
+                </div>
+              </div>
+            </label>
+            <div className="technique-tips">
+              {(Object.keys(PROMPT_PRESETS) as PresetKey[]).map((key) => (
+                <div key={key} className="technique-tip">
+                  <strong>{PROMPT_PRESETS[key].label}:</strong>{" "}
+                  {PROMPT_PRESETS[key].description}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Grading */}
