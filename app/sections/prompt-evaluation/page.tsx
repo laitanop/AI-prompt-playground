@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import SectionNav from "@/components/SectionNav";
-import type { EvalResult, TestCase } from "@/lib/grading";
+import type { EvalResult, OutputFormat, TestCase } from "@/lib/grading";
 
 const DEFAULT_SYSTEM_PROMPT = "Please answer the user's question.";
 
@@ -10,10 +10,19 @@ const DEFAULT_TEST_CASES: TestCase[] = [
   { id: "1", input: "What's 2+2?", criteria: "" },
   { id: "2", input: "How do I make oatmeal?", criteria: "" },
   { id: "3", input: "How far away is the Moon?", criteria: "" },
+  {
+    id: "4",
+    input: "What is the current price of Apple (AAPL) stock right now?",
+    criteria: "Provides the current, live stock price as a specific dollar amount",
+  },
 ];
 
 const MAX_TEST_CASES = 20;
 const MAX_SCORE = 10;
+
+type Summary =
+  | { format: "boolean"; total: number; passed: number }
+  | { format: "score"; total: number; average: number };
 
 function makeId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -29,17 +38,12 @@ function scoreTier(score: number): "high" | "mid" | "low" {
 
 export default function PromptEvaluationPage() {
   const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>("score");
   const [testCases, setTestCases] = useState<TestCase[]>(DEFAULT_TEST_CASES);
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState<EvalResult[] | null>(null);
-  const [summary, setSummary] = useState<{
-    average: number;
-    total: number;
-  } | null>(null);
-  const [previousSummary, setPreviousSummary] = useState<{
-    average: number;
-    total: number;
-  } | null>(null);
+  const [summary, setSummary] = useState<Summary | null>(null);
+  const [previousSummary, setPreviousSummary] = useState<Summary | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const isValid =
@@ -81,14 +85,14 @@ export default function PromptEvaluationPage() {
     setRunning(true);
     setError(null);
     setResults(null);
-    setPreviousSummary(summary);
+    setPreviousSummary(summary && summary.format === outputFormat ? summary : null);
     setSummary(null);
 
     try {
       const res = await fetch("/api/evaluate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ systemPrompt, testCases }),
+        body: JSON.stringify({ systemPrompt, outputFormat, testCases }),
       });
 
       const data = await res.json();
@@ -98,7 +102,7 @@ export default function PromptEvaluationPage() {
       }
 
       setResults(data.results);
-      setSummary(data.summary);
+      setSummary({ format: outputFormat, ...data.summary });
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -148,18 +152,50 @@ export default function PromptEvaluationPage() {
                 <span className="info-icon">ℹ️</span>
                 <div className="tooltip">
                   A second Claude call acts as a judge: given the message and
-                  the response, it scores 0–10. If a test case has criteria, the
-                  judge scores against that. If not, it scores overall quality,
-                  accuracy, and helpfulness instead.
+                  the response, it grades the response. If a test case has
+                  criteria, the judge grades against that. If not, it grades
+                  overall quality, accuracy, and helpfulness instead.
                 </div>
               </div>
             </label>
+
+            <label>
+              Output Format
+              <div className="info-icon-wrapper">
+                <span className="info-icon">ℹ️</span>
+                <div className="tooltip">
+                  Pass/Fail asks the judge for a simple true/false verdict —
+                  good for a checklist-style score like &quot;7/10 passed.&quot;
+                  Numeric Score asks for a 0–10 rating instead — good for
+                  tracking gradual improvement with an average, since it can
+                  tell &quot;slightly better&quot; apart from &quot;much
+                  better,&quot; not just pass vs. fail.
+                </div>
+              </div>
+            </label>
+            <div className="format-toggle">
+              <button
+                type="button"
+                className={outputFormat === "score" ? "selected" : ""}
+                onClick={() => setOutputFormat("score")}
+              >
+                🔢 Numeric score (0–10)
+              </button>
+              <button
+                type="button"
+                className={outputFormat === "boolean" ? "selected" : ""}
+                onClick={() => setOutputFormat("boolean")}
+              >
+                ✅ Pass / Fail
+              </button>
+            </div>
+
             <p className="mode-toggle-hint">
               Draft a prompt → run it against your eval dataset → feed every
-              response through the grader → get an averaged score. Try it: run
-              the bare prompt above as-is, then edit it to add something like
-              &quot;Answer with ample detail&quot; and run again — watch the
-              average change.
+              response through the grader → get a result per test case. Try
+              it: run the bare prompt above as-is, then edit it to add
+              something like &quot;Answer with ample detail&quot; and run
+              again — watch the result change.
             </p>
           </div>
 
@@ -232,13 +268,13 @@ export default function PromptEvaluationPage() {
         {/* Results */}
         {error && <div className="error-box">{error}</div>}
 
-        {summary && (
+        {summary && summary.format === "score" && (
           <div className={`eval-summary ${scoreTier(summary.average)}`}>
             Average score: {summary.average.toFixed(1)} / {MAX_SCORE}
             <span className="eval-summary-sub">
               {" "}
               across {summary.total} test case{summary.total === 1 ? "" : "s"}
-              {previousSummary && (
+              {previousSummary && previousSummary.format === "score" && (
                 <>
                   {" · "}
                   {summary.average > previousSummary.average
@@ -256,6 +292,30 @@ export default function PromptEvaluationPage() {
           </div>
         )}
 
+        {summary && summary.format === "boolean" && (
+          <div
+            className={`eval-summary ${
+              summary.passed === summary.total ? "high" : "low"
+            }`}
+          >
+            {summary.passed} / {summary.total} passed
+            <span className="eval-summary-sub">
+              {previousSummary && previousSummary.format === "boolean" && (
+                <>
+                  {" · "}
+                  {summary.passed > previousSummary.passed
+                    ? "▲"
+                    : summary.passed < previousSummary.passed
+                      ? "▼"
+                      : "—"}{" "}
+                  vs. previous run ({previousSummary.passed}/
+                  {previousSummary.total})
+                </>
+              )}
+            </span>
+          </div>
+        )}
+
         {results && (
           <div className="results-list">
             {results.map((result, index) => (
@@ -264,6 +324,12 @@ export default function PromptEvaluationPage() {
                   <span>Test Case {index + 1}</span>
                   {result.error ? (
                     <span className="score-badge low">ERROR</span>
+                  ) : outputFormat === "boolean" ? (
+                    <span
+                      className={`score-badge ${result.pass ? "high" : "low"}`}
+                    >
+                      {result.pass ? "PASS" : "FAIL"}
+                    </span>
                   ) : (
                     <span
                       className={`score-badge ${scoreTier(result.score ?? 0)}`}

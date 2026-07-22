@@ -1,15 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/lib/anthropic";
-import { gradeResponse, type EvalResult, type TestCase } from "@/lib/grading";
+import {
+  gradeResponse,
+  type EvalResult,
+  type OutputFormat,
+  type TestCase,
+} from "@/lib/grading";
 
 const MODEL = "claude-haiku-4-5-20251001";
 const MAX_TEST_CASES = 20;
 
-function validate(body: unknown): { systemPrompt: string; testCases: TestCase[] } | null {
+function validate(body: unknown): {
+  systemPrompt: string;
+  outputFormat: OutputFormat;
+  testCases: TestCase[];
+} | null {
   if (typeof body !== "object" || body === null) return null;
-  const { systemPrompt, testCases } = body as Record<string, unknown>;
+  const { systemPrompt, outputFormat, testCases } = body as Record<string, unknown>;
 
   if (typeof systemPrompt !== "string" || !systemPrompt.trim()) return null;
+  if (outputFormat !== "boolean" && outputFormat !== "score") return null;
   if (!Array.isArray(testCases) || testCases.length < 1 || testCases.length > MAX_TEST_CASES) {
     return null;
   }
@@ -27,10 +37,14 @@ function validate(body: unknown): { systemPrompt: string; testCases: TestCase[] 
     }
   }
 
-  return { systemPrompt, testCases: testCases as TestCase[] };
+  return { systemPrompt, outputFormat, testCases: testCases as TestCase[] };
 }
 
-async function runTestCase(systemPrompt: string, testCase: TestCase): Promise<EvalResult> {
+async function runTestCase(
+  systemPrompt: string,
+  outputFormat: OutputFormat,
+  testCase: TestCase,
+): Promise<EvalResult> {
   const { id, input, criteria } = testCase;
 
   let response: string;
@@ -57,17 +71,13 @@ async function runTestCase(systemPrompt: string, testCase: TestCase): Promise<Ev
   }
 
   try {
-    const grade = await gradeResponse(client, input, response, criteria);
+    const grade = await gradeResponse(client, input, response, criteria, outputFormat);
     return { id, input, criteria, response, ...grade };
   } catch (error) {
-    return {
-      id,
-      input,
-      criteria,
-      response,
-      score: 0,
-      reasoning: `Grading failed: ${error instanceof Error ? error.message : "unknown error"}`,
-    };
+    const reasoning = `Grading failed: ${error instanceof Error ? error.message : "unknown error"}`;
+    return outputFormat === "boolean"
+      ? { id, input, criteria, response, pass: false, reasoning }
+      : { id, input, criteria, response, score: 0, reasoning };
   }
 }
 
@@ -78,27 +88,29 @@ export async function POST(request: NextRequest) {
 
     if (!validated) {
       return NextResponse.json(
-        { error: "Invalid request: check systemPrompt and testCases" },
+        { error: "Invalid request: check systemPrompt, outputFormat, and testCases" },
         { status: 400 },
       );
     }
 
-    const { systemPrompt, testCases } = validated;
+    const { systemPrompt, outputFormat, testCases } = validated;
 
     const results = await Promise.all(
-      testCases.map((tc) => runTestCase(systemPrompt, tc)),
+      testCases.map((tc) => runTestCase(systemPrompt, outputFormat, tc)),
     );
 
-    const scored = results.filter((r) => typeof r.score === "number");
-    const average =
-      scored.length > 0
-        ? scored.reduce((sum, r) => sum + (r.score ?? 0), 0) / scored.length
-        : 0;
+    const summary =
+      outputFormat === "boolean"
+        ? { total: results.length, passed: results.filter((r) => r.pass).length }
+        : {
+            total: results.length,
+            average:
+              results.length > 0
+                ? results.reduce((sum, r) => sum + (r.score ?? 0), 0) / results.length
+                : 0,
+          };
 
-    return NextResponse.json({
-      results,
-      summary: { average, total: results.length },
-    });
+    return NextResponse.json({ results, summary });
   } catch (error) {
     console.error("Evaluate API error:", error);
     return NextResponse.json(
