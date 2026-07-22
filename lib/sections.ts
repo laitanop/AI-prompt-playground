@@ -53,11 +53,11 @@ export const sections: CourseSection[] = [
     concepts: [
       "Tool definitions",
       "Tool-use loop",
-      "Parallel tool calls",
-      "Forced tool choice",
+      "Agentic reasoning",
+      "Tool orchestration",
     ],
-    status: "planned",
-    href: "#",
+    status: "in-progress",
+    href: "/sections/tool-integration",
   },
   {
     id: "rag",
