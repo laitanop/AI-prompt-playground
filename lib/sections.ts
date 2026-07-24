@@ -65,8 +65,9 @@ export const sections: CourseSection[] = [
     title: "Retrieval-Augmented Generation",
     tagline: "Grounding answers in your own documents.",
     concepts: ["Chunking & embeddings", "Retrieval", "Citations", "Context windows"],
-    status: "planned",
-    href: "#",
+    status: "in-progress",
+    href: "/sections/rag",
+    image: "/images/rag.png",
   },
   {
     id: "multimodal",

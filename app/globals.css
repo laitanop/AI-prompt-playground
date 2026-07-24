@@ -1824,3 +1824,181 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================
+   RAG Section
+   ============================================ */
+
+.chunk-strategy-example {
+  margin-top: 0.75rem !important;
+  font-size: 0.8rem !important;
+  color: #718096 !important;
+  text-align: left;
+}
+
+/* Five-step RAG flow */
+.rag-flow-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rag-flow-step {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.rag-flow-num {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #4299e1;
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rag-flow-step strong {
+  color: #1a202c;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.rag-flow-step p {
+  color: #4a5568;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Chunk preview pills */
+.chunk-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chunk-pill {
+  padding: 0.35rem 0.75rem;
+  background: #edf2f7;
+  border: 1px solid #cbd5e0;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #2d3748;
+}
+
+/* Ranked chunk rows with similarity bars */
+.chunk-rank-row {
+  padding: 1rem 1.25rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.chunk-rank-row.chunk-selected {
+  background: #f0fff4;
+  border-color: #48bb78;
+}
+
+.chunk-rank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.chunk-rank-heading {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.chunk-rank-score {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.85rem;
+  color: #4a5568;
+}
+
+.chunk-score-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+.chunk-score-fill {
+  height: 100%;
+  background: #4299e1;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.chunk-selected .chunk-score-fill {
+  background: #48bb78;
+}
+
+.chunk-rank-snippet {
+  font-size: 0.82rem;
+  color: #718096;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Embedding source badge */
+.embedding-source-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.embedding-source-badge.voyage {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border: 1px solid #90cdf4;
+}
+
+.embedding-source-badge.lexical {
+  background: #fffaf0;
+  color: #975a16;
+  border: 1px solid #f6e05e;
+}
+
+@media (max-width: 768px) {
+  .embedding-source-badge {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.5rem;
+    width: fit-content;
+  }
+}
+
+/* RAG — infographic figure */
+.rag-figure {
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.rag-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
