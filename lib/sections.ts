@@ -58,6 +58,7 @@ export const sections: CourseSection[] = [
     ],
     status: "in-progress",
     href: "/sections/tool-integration",
+    image: "/images/Tool-use-integration.png",
   },
   {
     id: "rag",
