@@ -71,11 +71,17 @@ export const sections: CourseSection[] = [
   },
   {
     id: "multimodal",
-    title: "Multimodal (Images & Documents)",
-    tagline: "Sending images and PDFs to Claude for analysis.",
-    concepts: ["Vision", "PDF understanding", "Base64 encoding", "Mixed content messages"],
-    status: "planned",
-    href: "#",
+    title: "Multimodal & Advanced Features",
+    tagline:
+      "Extended thinking, images, PDFs, and citations.",
+    concepts: [
+      "Extended thinking & effort",
+      "Vision (images)",
+      "PDF understanding",
+      "Citations",
+    ],
+    status: "in-progress",
+    href: "/sections/multimodal",
   },
   {
     id: "automated-workflows",

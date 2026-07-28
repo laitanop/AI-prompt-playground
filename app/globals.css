@@ -2002,3 +2002,528 @@ textarea:focus {
   width: 100%;
   height: auto;
 }
+
+/* ========================================================================== */
+/* Multimodal & Advanced Features section                                     */
+/* ========================================================================== */
+
+/* Sub-section overview cards */
+.mm-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+}
+
+.mm-overview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.25rem 1rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+
+.mm-overview-card:hover {
+  border-color: #a3bffa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+}
+
+.mm-overview-card.active {
+  border-color: #667eea;
+  background: #eef2ff;
+  box-shadow: 0 0 0 1px #667eea inset;
+}
+
+.mm-overview-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.mm-overview-title {
+  font-weight: 600;
+  color: #1a202c;
+  font-size: 0.95rem;
+}
+
+.mm-overview-tagline {
+  color: #4a5568;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* Sub-section tab bar */
+.mm-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background: white;
+  border-radius: 12px;
+  padding: 0.6rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mm-tab {
+  flex: 1 1 auto;
+  padding: 0.65rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f7fafc;
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.mm-tab:hover {
+  background: #edf2f7;
+  color: #2d3748;
+}
+
+.mm-tab.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.mm-problem {
+  margin-bottom: 1.5rem;
+}
+
+/* Which model this sub-section calls, and why */
+.mm-model-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #e2e8f0;
+  font-size: 0.83rem;
+  color: #718096;
+  line-height: 1.6;
+}
+
+.mm-model-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: #e6fffa;
+  border: 1px solid #b2f5ea;
+  color: #234e52;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mm-model-badge.opus {
+  background: #eef2ff;
+  border-color: #c3dafe;
+  color: #3c366b;
+}
+
+.mm-overview-card .mm-model-badge {
+  margin-top: 0.35rem;
+}
+
+/* Code samples */
+.mm-code {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: #1a202c;
+  color: #e2e8f0;
+  border-radius: 10px;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Inline code inside prose */
+.section-card code,
+.callout-content code,
+.concept code,
+.mm-hint code {
+  background: #edf2f7;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 0.05em 0.35em;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  color: #4c51bf;
+}
+
+.mm-code code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Controls */
+.mm-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.mm-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin: 0;
+}
+
+.mm-switch input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #667eea;
+  cursor: pointer;
+}
+
+.mm-effort {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.mm-effort-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-right: 0.25rem;
+}
+
+.mm-effort-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f7fafc;
+  color: #4a5568;
+  font-size: 0.8rem;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mm-effort-btn:hover:not(:disabled) {
+  border-color: #a3bffa;
+  color: #2d3748;
+}
+
+.mm-effort-btn.selected {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.mm-effort-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mm-hint {
+  margin-top: 0.75rem;
+  font-size: 0.83rem;
+  color: #718096;
+  line-height: 1.6;
+}
+
+/* Token usage strip */
+.mm-usage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.mm-usage strong {
+  color: #2d3748;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+}
+
+/* Thinking output */
+.mm-thinking {
+  padding: 1.25rem;
+  background: #faf5ff;
+  border: 1px solid #e9d8fd;
+  border-left: 4px solid #9f7aea;
+  border-radius: 8px;
+  color: #44337a;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+/* File uploads */
+.mm-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.75rem;
+  background: #f7fafc;
+  border: 2px dashed #cbd5e0;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.mm-dropzone-empty {
+  font-size: 2.5rem;
+  opacity: 0.5;
+}
+
+.mm-preview {
+  max-width: 100%;
+  max-height: 320px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+}
+
+.mm-filemeta {
+  font-size: 0.8rem;
+  color: #718096;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  word-break: break-all;
+  text-align: center;
+}
+
+/* Citations */
+.mm-cited-answer {
+  white-space: normal;
+}
+
+.mm-cited {
+  background: #fefcbf;
+  border-bottom: 2px solid #ecc94b;
+  border-radius: 3px;
+  padding: 0.05em 0.15em;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mm-cited:hover {
+  background: #faf089;
+}
+
+.mm-cited.active {
+  background: #f6e05e;
+  box-shadow: 0 0 0 3px rgba(236, 201, 75, 0.35);
+}
+
+.mm-cite-marker {
+  margin-left: 0.15em;
+  font-size: 0.7em;
+  font-weight: 700;
+  color: #975a16;
+}
+
+/* Answer-block breakdown table */
+.mm-blocks-scroll {
+  overflow-x: auto;
+}
+
+.mm-blocks {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.mm-blocks th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  color: #4a5568;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mm-blocks td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid #edf2f7;
+  vertical-align: top;
+  color: #2d3748;
+  line-height: 1.6;
+}
+
+.mm-blocks tr.cited td {
+  background: #fffff0;
+}
+
+.mm-blocks tr.uncited td {
+  color: #718096;
+  font-style: italic;
+}
+
+.mm-blocks-idx {
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  color: #a0aec0 !important;
+  font-style: normal !important;
+  width: 2.5rem;
+}
+
+.mm-blocks-none {
+  font-size: 0.82rem;
+  color: #a0aec0;
+  white-space: nowrap;
+}
+
+.mm-cite-chip {
+  display: inline-block;
+  margin: 0 0.3rem 0.3rem 0;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid #ecc94b;
+  border-radius: 999px;
+  background: #fefcbf;
+  color: #744210;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mm-cite-chip:hover {
+  background: #faf089;
+  transform: translateY(-1px);
+}
+
+/* Source document with cited spans highlighted in place */
+.mm-source-doc {
+  padding: 1.5rem;
+  background: #fdfdfd;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.85;
+  color: #2d3748;
+  white-space: pre-wrap;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.mm-src-hit {
+  background: #fefcbf;
+  border-radius: 3px;
+  padding: 0.1em 0.2em;
+  cursor: pointer;
+  box-shadow: inset 0 -2px 0 #ecc94b;
+  transition: background 0.15s ease;
+}
+
+.mm-src-hit:hover {
+  background: #faf089;
+}
+
+.mm-src-hit.active {
+  background: #f6e05e;
+  box-shadow:
+    inset 0 -2px 0 #b7791f,
+    0 0 0 3px rgba(236, 201, 75, 0.35);
+}
+
+.mm-sources {
+  list-style: none;
+  counter-reset: mm-source;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.mm-source {
+  counter-increment: mm-source;
+  position: relative;
+  padding: 1rem 1rem 1rem 2.75rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mm-source::before {
+  content: counter(mm-source);
+  position: absolute;
+  left: 0.9rem;
+  top: 1rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ecc94b;
+  color: #744210;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mm-source:hover,
+.mm-source.active {
+  border-color: #ecc94b;
+  background: #fffff0;
+}
+
+.mm-source-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.mm-source-range {
+  font-weight: 400;
+  color: #a0aec0;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+}
+
+.mm-source blockquote {
+  color: #2d3748;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .mm-tab {
+    flex: 1 1 100%;
+  }
+
+  .mm-controls-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
