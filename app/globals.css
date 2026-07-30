@@ -20,6 +20,7 @@ body {
 main {
   min-height: 100vh;
   padding: 2rem;
+  padding-top: 3rem;
 }
 
 .container {
@@ -2525,5 +2526,167 @@ textarea:focus {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+}
+
+/* ============================================
+   Navbar
+   ============================================ */
+
+nav.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.navbar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.25rem 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.navbar-logo:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.navbar-logo-icon {
+  font-size: 1.5rem;
+}
+
+.navbar-logo-text {
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.navbar-info {
+  flex: 1;
+  text-align: center;
+}
+
+.navbar-tagline {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.navbar-tagline strong {
+  color: white;
+  font-weight: 600;
+  display: inline;
+}
+
+.navbar-credit {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.navbar-link {
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.navbar-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar-year {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .navbar-container {
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+  }
+
+  .navbar-info {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .navbar-tagline {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  nav.navbar {
+    padding: 1rem 0;
+  }
+
+  .navbar-container {
+    padding: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .navbar-brand {
+    justify-content: center;
+  }
+
+  .navbar-logo-text {
+    font-size: 1rem;
+  }
+
+  .navbar-info {
+    grid-column: 1;
+    text-align: center;
+  }
+
+  .navbar-tagline {
+    font-size: 0.8rem;
+  }
+
+  .navbar-credit {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .navbar-link {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .navbar-year {
+    font-size: 0.8rem;
   }
 }
