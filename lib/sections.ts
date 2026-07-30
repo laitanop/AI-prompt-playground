@@ -49,7 +49,8 @@ export const sections: CourseSection[] = [
   {
     id: "tool-integration",
     title: "Tool Use & Integration",
-    tagline: "Giving Claude functions to call and handling multi-step tool loops.",
+    tagline:
+      "Giving Claude functions to call and handling multi-step tool loops.",
     concepts: [
       "Tool definitions",
       "Tool-use loop",
@@ -64,7 +65,12 @@ export const sections: CourseSection[] = [
     id: "rag",
     title: "Retrieval-Augmented Generation",
     tagline: "Grounding answers in your own documents.",
-    concepts: ["Chunking & embeddings", "Retrieval", "Citations", "Context windows"],
+    concepts: [
+      "Chunking & embeddings",
+      "Retrieval",
+      "Citations",
+      "Context windows",
+    ],
     status: "in-progress",
     href: "/sections/rag",
     image: "/images/rag.png",
@@ -72,8 +78,7 @@ export const sections: CourseSection[] = [
   {
     id: "multimodal",
     title: "Multimodal & Advanced Features",
-    tagline:
-      "Extended thinking, images, PDFs, and citations.",
+    tagline: "Extended thinking, images, PDFs, and citations.",
     concepts: [
       "Extended thinking & effort",
       "Vision (images)",
@@ -82,13 +87,6 @@ export const sections: CourseSection[] = [
     ],
     status: "in-progress",
     href: "/sections/multimodal",
-  },
-  {
-    id: "automated-workflows",
-    title: "Automated Workflows",
-    tagline: "Chaining prompts and tools into multi-step agentic pipelines.",
-    concepts: ["Prompt chaining", "Orchestration", "Agentic loops", "Error handling & retries"],
-    status: "planned",
-    href: "#",
+    image: "/images/features-claude.png",
   },
 ];
